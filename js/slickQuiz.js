@@ -1,14 +1,16 @@
 /*!
  * SlickQuiz jQuery Plugin
- * http://github.com/jewlofthelotus/SlickQuiz
+ * http://github.com/jgbecker/SlickQuiz
  *
- * @updated February 16, 2014
- * @version 1.5.14
+ * @updated March 5, 2014
+ * @version 1.5.14-jb
  *
  * @author Julie Cameron - http://www.juliecameron.com
  * @copyright (c) 2013 Quicken Loans - http://www.quickenloans.com
  * @license MIT
  */
+
+/* Modified by Johannes Becker, ZHAW -- Zurich University of Applied Sciences */
 
 (function($){
     $.slickQuiz = function(element, options) {
@@ -192,6 +194,8 @@
                                 answer   = answers[i],
                                 optionId = inputName + '_' + i.toString();
 
+                                answer.optionId = optionId;
+
                                 // If question has >1 true answers and is not a select any, use checkboxes; otherwise, radios
                                 var input = '<input id="' + optionId + '" name="' + inputName +
                                             '" type="' + inputType + '" /> ';
@@ -309,21 +313,19 @@
                 for (i in answers) {
                     if (answers.hasOwnProperty(i)) {
                         var answer = answers[i];
-
                         if (answer.correct) {
-                            trueAnswers.push($('<div />').html(answer.option).text());
+                            trueAnswers.push (answer.optionId);
                         }
                     }
                 }
 
-                // NOTE: Collecting .text() for comparison aims to ensure that HTML entities
-                // and HTML elements that may be modified by the browser match up
-
                 // Collect the answers submitted
                 var selectedAnswers = [];
                 answerInputs.each( function() {
-                    var inputValue = $(this).next('label').text();
-                    selectedAnswers.push(inputValue);
+
+                    var inputValue = $(this).attr('id');
+                    selectedAnswers.push (inputValue);
+
                 });
 
                 if (plugin.config.preventUnanswered && selectedAnswers.length === 0) {
